@@ -8,21 +8,21 @@ ANKER_URL = "https://uni-tuebingen.de/de/257900"
 
 # Streamlit Interface
 def main():
-    st.title("AI Ethics Navigator")
+    st.title("AI Guidelines Guru")
 
-    st.markdown("""
-Dieses prototypische Tool wurde im Rahmen des Projekts [**ANKER**](%s) am Internationalen Zentrum für Ethik in den Wissenschaften an der Universität Tübingen entwickelt.
-
-**Funktionen**
-- Durchsucht den Inhalt von über **200 Ethikrichtlinien und -frameworks**.
-- Bietet eine automatisch generierte Volltextantwort auf gestellte Fragen.
-- Stellt die relevantesten Quellen mit Metadaten bereit.
-
-**Hinweise**
-- Fragen müssen in der aktuellen Version **in englischer Sprache** formuliert werden.
-- Durch ein Fragezeichen neben den Quellen können die ausgewählten Textausschnitte eingesehen werden. 
-- Textausschnitte sind aktuell für den prototypischen Anwendungsfall absichtlich kurz gehalten.
-""" % ANKER_URL)
+    st.markdown(f"""
+    Dieses prototypische Tool wurde im Rahmen des Projekts [**ANKER**]({ANKER_URL}) am Internationalen Zentrum für Ethik in den Wissenschaften an der Universität Tübingen entwickelt.
+    
+    ### Funktionen
+    - Durchsucht den Inhalt von über **200 Ethikrichtlinien und -frameworks**.
+    - Bietet eine automatisch generierte Volltextantwort auf gestellte Fragen.
+    - Stellt die relevantesten Quellen mit Metadaten bereit.
+    
+    ### Hinweise
+    - Fragen müssen in der aktuellen Version **in englischer Sprache** formuliert werden.
+    - Klicken Sie auf **"View Snippet"** unter den Quellen, um die ausgewählten Textausschnitte einzusehen. 
+    - Textausschnitte sind aktuell für den prototypischen Anwendungsfall absichtlich kurz gehalten.
+    """, unsafe_allow_html=True)
 
     
     # Input field for the search query
@@ -60,12 +60,14 @@ Dieses prototypische Tool wurde im Rahmen des Projekts [**ANKER**](%s) am Intern
 #         st.write("---")
 
 def display_results(results):
+    st.divider()
+    
     # Use columns for layout: answer on the left, sources on the right
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([3, 2])
     
     with col1:
         st.subheader("Answer")
-        st.write(results["answer"])
+        st.info(results["answer"])
     
     with col2:
         st.subheader("Sources")
@@ -75,24 +77,25 @@ def display_results(results):
             context = results["documents"]
             for i, source in enumerate(context):
                 metadata = source["metadata"]
-                pub_year = int(metadata.get('year_of_publication', None)) if metadata.get('year_of_publication', None) else 'N/A'
+                pub_year = metadata.get('year_of_publication') or 'N/A'
                 document_url = metadata.get('document_url', 'N/A')
 
-                # Adding formatting and color for the source container with proper word wrapping for URLs
-                st.markdown(
-                    f"""
-                    <div style='background-color: #f0f2f6; padding: 10px; border-radius: 5px; margin-bottom: 10px; word-wrap: break-word;'>
-                        <strong>Source {i + 1}:</strong> {metadata["document_name"]}<br>
-                        <strong>Institution:</strong> {metadata["institution"]}<br>
-                        <strong>Year:</strong> {pub_year}<br>
-                        <strong>URL:</strong> <a href='{document_url}' style='word-break: break-all;'>{document_url}</a><br>
-                        <strong>Page:</strong> {metadata.get('page', 'N/A')}
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                    help=source["page_content"]
-                )
-                # Adding hover tooltip for each source context text
+                with st.container(border=True):
+                    st.markdown(f"**Source {i + 1}:** {metadata['document_name']}")
+                    st.markdown(f"**Institution:** {metadata['institution']}")
+                    st.markdown(f"**Year:** {pub_year}")
+                    
+                    if document_url != 'N/A':
+                        st.markdown(f"**URL:** [Link]({document_url})")
+                    else:
+                        st.markdown("**URL:** N/A")
+                        
+                    st.markdown(f"**Page:** {metadata.get('page', 'N/A')}")
+                    
+                    # Using popover for the source snippet to replace the hover help
+                    with st.popover("📖 View Snippet"):
+                        st.caption("Relevant excerpt from the document:")
+                        st.write(source["page_content"])
                 
 
 
