@@ -8,10 +8,10 @@ ANKER_URL = "https://uni-tuebingen.de/de/257900"
 
 # Streamlit Interface
 def main():
-    st.title("AI Guidelines Guru")
+    st.title("AI Guidelines Guru v0.1")
 
     st.markdown(f"""
-    Dieses prototypische Tool wurde im Rahmen des Projekts [**ANKER**]({ANKER_URL}) am Internationalen Zentrum für Ethik in den Wissenschaften an der Universität Tübingen entwickelt.
+    Dieses Tool wurde im Rahmen des Projekts [**ANKER**]({ANKER_URL}) am Internationalen Zentrum für Ethik in den Wissenschaften an der Universität Tübingen entwickelt und steht zur Zeit als Prototyp zur Verfügung.
     
     ### Funktionen
     - Durchsucht den Inhalt von über **200 Ethikrichtlinien und -frameworks**.
@@ -22,6 +22,10 @@ def main():
     - Fragen müssen in der aktuellen Version **in englischer Sprache** formuliert werden.
     - Klicken Sie auf **"View Snippet"** unter den Quellen, um die ausgewählten Textausschnitte einzusehen. 
     - Textausschnitte sind aktuell für den prototypischen Anwendungsfall absichtlich kurz gehalten.
+    - **Confidence Level:** Testweise enthält jede Antwort eine Selbsteinschätzung des LLM Modells darüber, wie gut die gefundenen Textausschnitte die Antwort stützen:
+        - **High:** Die Dokumente enthalten die Informationen explizit und umfassend.
+        - **Medium:** Informationen sind unvollständig oder erfordern logische Schlussfolgerungen.
+        - **Low:** Der Kontext ist unzureichend oder unpassend.
     """, unsafe_allow_html=True)
 
     
@@ -93,7 +97,7 @@ def display_results(results):
                     st.markdown(f"**Page:** {metadata.get('page', 'N/A')}")
                     
                     # Using popover for the source snippet to replace the hover help
-                    with st.popover("📖 View Snippet"):
+                    with st.popover("View Snippet"):
                         st.caption("Relevant excerpt from the document:")
                         st.write(source["page_content"])
                 
