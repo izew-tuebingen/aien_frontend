@@ -22,7 +22,7 @@ def main():
     - Fragen müssen in der aktuellen Version **in englischer Sprache** formuliert werden.
     - Klicken Sie auf **"View Snippet"** unter den Quellen, um die ausgewählten Textausschnitte einzusehen. 
     - Textausschnitte sind aktuell für den prototypischen Anwendungsfall absichtlich kurz gehalten.
-    - **Confidence Level:** Testweise enthält jede Antwort eine Selbsteinschätzung des LLM Modells darüber, wie gut die gefundenen Textausschnitte die Antwort stützen:
+    - **Confidence Level:** Testweise enthält jede Antwort eine Einschätzung darüber, wie gut die gefundenen Textausschnitte die Antwort stützen:
         - **High:** Die Dokumente enthalten die Informationen explizit und umfassend.
         - **Medium:** Informationen sind unvollständig oder erfordern logische Schlussfolgerungen.
         - **Low:** Der Kontext ist unzureichend oder unpassend.
